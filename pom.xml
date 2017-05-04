@@ -4,7 +4,7 @@
     <name>Docker Material Poller</name>
     <groupId>com.braindrainpain</groupId>
     <artifactId>docker-material-poller</artifactId>
-    <version>0.0.10-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     <repositories>
         <repository>
