@@ -60,6 +60,10 @@ public class DockerMaterialConfiguration implements PackageMaterialConfiguration
         RepositoryConfiguration repositoryConfiguration = new RepositoryConfiguration();
         repositoryConfiguration.add(new PackageMaterialProperty(Constants.REGISTRY).
                 with(DISPLAY_NAME, "Registry URL").with(DISPLAY_ORDER, 0));
+        repositoryConfiguration.add(new PackageMaterialProperty(Constants.USERNAME).
+                with(REQUIRED, false).with(DISPLAY_NAME, "Registry Username").with(DISPLAY_ORDER, 1));
+        repositoryConfiguration.add(new PackageMaterialProperty(Constants.PASSWORD).
+                with(REQUIRED, false).with(SECURE, true).with(DISPLAY_NAME, "Registry Password").with(DISPLAY_ORDER, 2));
         return repositoryConfiguration;
     }
 

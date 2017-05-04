@@ -56,7 +56,7 @@ public class HttpClientServiceIntegrationTest extends WebMockTest {
     @Test
     public void testCheckConnectionShouldReturnStatus404() throws IOException {
         try {
-            httpClientService.checkConnection("http://localhost:5000/");
+            httpClientService.checkConnection("http://localhost:5000/", "foo", "foo");
             fail();
         } catch (RuntimeException e) {}
         assertEquals("404 page not found", getMethod.getResponseBodyAsString());
@@ -65,14 +65,14 @@ public class HttpClientServiceIntegrationTest extends WebMockTest {
 
     @Test
     public void testCheckConnectionWithTagsUrlShouldReturnFullyJsonResponse() throws IOException {
-        httpClientService.checkConnection(DockerApiHttpHandler.DUMMY_TAGS_DOCKER_API_URL);
+        httpClientService.checkConnection(DockerApiHttpHandler.DUMMY_TAGS_DOCKER_API_URL, "foo", "foo");
         assertEquals(DockerApiHttpHandler.DUMMY_JSON_SUCCESS_RESPONSE, getMethod.getResponseBodyAsString());
         assertEquals(200, getMethod.getStatusCode());
     }
 
     @Test
     public void testCheckConnectionWithDefaultUrlShouldReturnEmptyJson() throws IOException {
-        httpClientService.checkConnection("http://localhost:5000/v2/");
+        httpClientService.checkConnection("http://localhost:5000/v2/", "foo", "foo");
         assertEquals(DockerApiHttpHandler.EMPTY_JSON_RESPONSE, getMethod.getResponseBodyAsString());
         assertEquals(200, getMethod.getStatusCode());
     }
@@ -80,7 +80,7 @@ public class HttpClientServiceIntegrationTest extends WebMockTest {
     @Test
     public void testCheckConnectionWithTagUrlAndUnknownServiceShouldReturnErrorJson() throws IOException {
         try{
-            httpClientService.checkConnection("http://localhost:5000/v2/abc/tags/list");
+            httpClientService.checkConnection("http://localhost:5000/v2/abc/tags/list", "foo", "foo");
             fail();
         } catch (RuntimeException e) {}
 

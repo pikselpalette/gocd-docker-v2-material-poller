@@ -43,6 +43,8 @@ import java.util.List;
 public class DockerRegistry  {
 
     private final String url;
+    private final String username;
+    private final String password;
 
     private static final List<String> protocols = new ArrayList<>(2);
 
@@ -58,25 +60,44 @@ public class DockerRegistry  {
 
     /**
      * Create a new instance of the DockerRegistry
-     * 
+     *
      * @param url RegistryURL
      */
     private DockerRegistry(final String url) {
         //TODO: try to let user configure the first matching sc ok status uri!
         this.url = url + "/v2/";
+        this.username = null;
+        this.password = null;
+    }
+
+    private DockerRegistry(final String url, final String username, final String password) {
+        //TODO: try to let user configure the first matching sc ok status uri!
+        this.url = url + "/v2/";
+        this.username = username;
+        this.password = password;
     }
 
     public static DockerRegistry getInstance(final String url) {
         return new DockerRegistry(url);
     }
-    
+
+    public static DockerRegistry getInstance(final String url, final String username, final String password) {
+        return new DockerRegistry(url, username, password);
+    }
+
     public static DockerRegistry getInstance(
             final RepositoryConfiguration repositoryPluginConfigurations) {
-        
+
         Property registry = repositoryPluginConfigurations.get(Constants.REGISTRY);
-        return new DockerRegistry(registry.getValue());
+        Property username = repositoryPluginConfigurations.get(Constants.USERNAME);
+        Property password = repositoryPluginConfigurations.get(Constants.PASSWORD);
+
+        if ((username.getValue() != null) && (username.getValue() != "") && (password.getValue() != null) && (password.getValue() != ""))
+          return new DockerRegistry(registry.getValue(), username.getValue(), password.getValue());
+        else
+          return new DockerRegistry(registry.getValue());
     }
-    
+
     /**
      * Validate the URL.
      *
@@ -107,12 +128,10 @@ public class DockerRegistry  {
      * Checks the connection to the registry
      */
     public void checkConnection() {
-        httpClientService.checkConnection(url);
+        httpClientService.checkConnection(url, username, password);
     }
 
     public String getUrl() {
         return url;
     }
-    
-    
 }

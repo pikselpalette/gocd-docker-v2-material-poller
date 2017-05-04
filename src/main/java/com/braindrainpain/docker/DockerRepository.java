@@ -49,6 +49,12 @@ public class DockerRepository {
 
     private DockerRepository(final RepositoryConfiguration repositoryConfiguration) {
         this.repositoryConfiguration = repositoryConfiguration;
+
+        String username = repositoryConfiguration.get(Constants.USERNAME).getValue();
+        String password = repositoryConfiguration.get(Constants.PASSWORD).getValue();
+
+        if ((username != null) && (username != "") && (password != null) && (password != ""))
+          this.httpClientService.authenticateConnection(username, password);
     }
 
     public static DockerRepository getInstance(final RepositoryConfiguration repositoryConfiguration) {

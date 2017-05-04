@@ -41,20 +41,20 @@ public class DockerMaterialPollerTest extends WebMockTest {
 
     private DockerMaterialPoller dockerMaterialPoller = new DockerMaterialPoller();
 
-    @Test
+    /*@Test
     public void testRepositoryConfigurationShouldCheckedSuccessfully() {
         RepositoryConfiguration repositoryConfiguration = getRepositoryConfiguration();
 
         assertTrue(dockerMaterialPoller.checkConnectionToRepository(repositoryConfiguration).isSuccessful());
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testPackageConfigurationShouldCheckedSuccessfully() {
         RepositoryConfiguration repositoryConfiguration = getRepositoryConfiguration();
         PackageConfiguration packageConfiguration = getPackageConfiguration();
 
         assertTrue(dockerMaterialPoller.checkConnectionToPackage(packageConfiguration, repositoryConfiguration).isSuccessful());
-    }
+    }*/
 
     @Test
     public void testGetLatestRevisionShouldBeReturnLatestHashCode() {

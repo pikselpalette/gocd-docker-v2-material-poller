@@ -27,9 +27,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.thoughtworks.go.plugin.api.logging.Logger;
+import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.URI;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 
@@ -54,12 +57,21 @@ public class HttpClientService {
         this.getMethod = getMethod;
     }
 
-    public void checkConnection(String url) {
+    public void authenticateConnection(String username, String password) {
+      Credentials credentials = new UsernamePasswordCredentials(username, password);
+      httpClient.getState().setCredentials(AuthScope.ANY, credentials);
+    }
+
+    public void checkConnection(String url, String username, String password) {
         LOG.debug("Checking: '" + url + "'");
         try {
             URI uri = new URI(url, false);
             this.getMethod.setURI(uri);
             getMethod.setFollowRedirects(false);
+
+            if ((username != null) && (password != null))
+              authenticateConnection(username, password);
+
             int status = httpClient.executeMethod(getMethod);
             if (status != HttpStatus.SC_OK) {
                 LOG.error("Not ok from: '" + url + "'");

@@ -33,4 +33,7 @@ public class Constants {
     public static final String REGISTRY = "REGISTRY";
     public static final String REPOSITORY = "REPOSITORY";
     public static final String TAG = "TAG";
+
+    public static final String USERNAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
 }
