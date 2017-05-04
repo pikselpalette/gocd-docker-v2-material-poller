@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<go-plugin id="Docker" version="6">
+<go-plugin id="docker.config.plugin" version="1">
 <about>
     <name>Docker Registry Plugin V2 API</name>
     <version>0.0.1</version>
-    <target-go-version>14.3</target-go-version>
+    <target-go-version>16.12</target-go-version>
     <description>
         Check for new Docker releases in a Docker Registry. This plugin is using the v2 api of docker registry.
         For more detailed information see: https://docs.docker.com/registry/spec/api/
     </description>
     <vendor>
-        <name>Jan De Cooman, Manuel Kasiske</name>
-        <url>https://github.com/Neofonie/gocd-docker-v2-material-poller.git</url>
+        <name>Jan De Cooman, Manuel Kasiske, Piksel</name>
+        <url>https://github.com/pikselpalette/gocd-docker-v2-material-poller.git</url>
     </vendor>
 </about>
 </go-plugin>
