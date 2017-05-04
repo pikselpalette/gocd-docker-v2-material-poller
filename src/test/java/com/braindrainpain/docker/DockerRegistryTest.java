@@ -20,88 +20,97 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 package com.braindrainpain.docker;
 
 import com.braindrainpain.docker.httpsupport.WebMockTest;
 import com.thoughtworks.go.plugin.api.response.validation.ValidationResult;
-import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.Test;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * @author Manuel Kasiske
- */
+* @author Manuel Kasiske
+*/
 @RunWith(MockitoJUnitRunner.class)
-public class DockerRegistryTest extends WebMockTest{
+public class DockerRegistryTest extends WebMockTest
+{
+	private DockerRegistry dockerRegistry;
 
-    private DockerRegistry dockerRegistry;
+	@Test
+	public void testGetInstanceWithPlainUrlShouldDeliverV2ApiExtension()
+	{
+		dockerRegistry = DockerRegistry.getInstance("http://www.anyDomain.de");
 
-    @Test
-    public void testGetInstanceWithPlainUrlShouldDeliverV2ApiExtension() {
-        dockerRegistry = DockerRegistry.getInstance("http://www.anyDomain.de");
+		assertEquals("http://www.anyDomain.de/v2/", dockerRegistry.getUrl());
+	}
 
-        assertEquals("http://www.anyDomain.de/v2/", dockerRegistry.getUrl());
-    }
+	@Test
+	public void testValidateShouldBeSuccessful()
+	{
+		dockerRegistry = DockerRegistry.getInstance("http://www.anyDomain.de");
+		ValidationResult validationResult = new ValidationResult();
+		dockerRegistry.validate(validationResult);
 
-    @Test
-    public void testValidateShouldBeSuccessful() {
-        dockerRegistry = DockerRegistry.getInstance("http://www.anyDomain.de");
-        ValidationResult validationResult = new ValidationResult();
-        dockerRegistry.validate(validationResult);
+		assertEquals(0, validationResult.getErrors().size());
+	}
 
-        assertEquals(0, validationResult.getErrors().size());
-    }
+	@Test
+	public void testValidateWithEmptyUrlShouldFail()
+	{
+		dockerRegistry = DockerRegistry.getInstance("");
+		ValidationResult validationResult = new ValidationResult();
+		dockerRegistry.validate(validationResult);
 
-    @Test
-    public void testValidateWithEmptyUrlShouldFail() {
-        dockerRegistry = DockerRegistry.getInstance("");
-        ValidationResult validationResult = new ValidationResult();
-        dockerRegistry.validate(validationResult);
+		assertEquals(1, validationResult.getErrors().size());
+	}
 
-        assertEquals(1, validationResult.getErrors().size());
-    }
+	@Test
+	public void testValidateWithUnsupportedProtocolShouldFail()
+	{
+		dockerRegistry = DockerRegistry.getInstance("htty://www.anyDomain.de");
+		ValidationResult validationResult = new ValidationResult();
+		dockerRegistry.validate(validationResult);
 
-    @Test
-    public void testValidateWithUnsupportedProtocolShouldFail() {
-        dockerRegistry = DockerRegistry.getInstance("htty://www.anyDomain.de");
-        ValidationResult validationResult = new ValidationResult();
-        dockerRegistry.validate(validationResult);
+		assertEquals(1, validationResult.getErrors().size());
+	}
 
-        assertEquals(1, validationResult.getErrors().size());
-    }
+	@Test
+	public void testValidateWithWrongUrlShouldFail()
+	{
+		dockerRegistry = DockerRegistry.getInstance("anyDomain.de");
+		ValidationResult validationResult = new ValidationResult();
+		dockerRegistry.validate(validationResult);
 
-    @Test
-    public void testValidateWithWrongUrlShouldFail() {
-        dockerRegistry = DockerRegistry.getInstance("anyDomain.de");
-        ValidationResult validationResult = new ValidationResult();
-        dockerRegistry.validate(validationResult);
+		assertEquals(1, validationResult.getErrors().size());
+	}
 
-        assertEquals(1, validationResult.getErrors().size());
-    }
+	@Test
+	public void testCheckConnectionShouldFailWithWrongRegistryUrl()
+	{
+		dockerRegistry = DockerRegistry.getInstance("http://www.anyDomain.de");
+		try
+		{
+			dockerRegistry.checkConnection();
+			fail();
+		}
+		catch (RuntimeException e) {}
+	}
 
-    @Test
-    public void testCheckConnectionShouldFailWithWrongRegistryUrl() {
-        dockerRegistry = DockerRegistry.getInstance("http://www.anyDomain.de");
-        try {
-            dockerRegistry.checkConnection();
-            fail();
-        } catch (RuntimeException e) {
+	@Test
+	public void testCheckConnectionShouldSucceed()
+	{
+		dockerRegistry = DockerRegistry.getInstance("http://localhost:5000");
 
-        }
-    }
-
-    /*@Test
-    public void testCheckConnectionShouldSucceed() {
-        dockerRegistry = DockerRegistry.getInstance("http://localhost:5000");
-        try {
-            dockerRegistry.checkConnection();
-        } catch (RuntimeException e) {
-            fail();
-        }
-    }*/
-
+		try
+		{
+			dockerRegistry.checkConnection();
+		}
+		catch (RuntimeException e)
+		{
+			fail();
+		}
+	}
 }
