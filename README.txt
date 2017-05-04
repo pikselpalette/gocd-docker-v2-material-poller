@@ -9,7 +9,7 @@ It's hard to keep up with two rapidly changing APIs. I've used Docker 1.3.1 and 
 
 <h2>Compiling</h2>
 In order to compile the project, you need to download the go-plugin-api-current.jar from the Go-Server. The best way is to copy the JAR from your Go-Server environment and install
-it in your local repository or you can download from http://search.maven.org/#search|gav|1|g:"cd.go.plugin" AND a:"go-plugin-api"
+it in your local repository or you can download from http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22cd.go.plugin%22%20AND%20a%3A%22go-plugin-api%22
 
 <blockquote>
 mvn install:install-file -Dfile=go-plugin-api-current.jar -DgroupId=com.thoughtworks.go -DartifactId=go-plugin-api -Dversion=16.12.0 -Dpackaging=jar
